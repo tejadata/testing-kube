@@ -1,5 +1,6 @@
 name: Build and Push Docker Image to JFrog Artifactory
-
+     - name: Login to JFrog Artifactory
+        run: jfrog rt c --url=https://<your-artifactory-url> --user=${{ secrets.ARTIFACTORY_USERNAME }} --password=${{ secrets.ARTIFACTORY_PASSWORD }} --interactive=false
 on:
   push:
     branches:
