@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  selector:
+    app: my-app
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: data-capture
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  # You might need to adjust this storage class based on your cluster's configuration
+  storageClassName: gp2
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rest-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+        - name: my-container
+          image: your-jfrog-docker-image:tag
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: my-volume
+              mountPath: /path/to/mount
+      volumes:
+        - name: my-volume
+          persistentVolumeClaim:
+            claimName: my-pvc
