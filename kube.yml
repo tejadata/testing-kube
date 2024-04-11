@@ -51,3 +51,14 @@ spec:
         - name: my-volume
           persistentVolumeClaim:
             claimName: my-pvc
+-----
+apiVersion: v1
+kind: Secret
+metadata:
+  name: artifactory-credentials
+type: Opaque
+data:
+  # Base64-encoded username and password
+  username: <base64-encoded-username>
+  password: <base64-encoded-password>
+
